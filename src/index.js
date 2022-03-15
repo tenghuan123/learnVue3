@@ -1,4 +1,4 @@
 import * as Vue from 'vue'
-import TodoList from './components/todoList.vue'
+import App from './App.vue'
 
-Vue.createApp(TodoList).mount("#app")
+Vue.createApp(App).mount("#app")
