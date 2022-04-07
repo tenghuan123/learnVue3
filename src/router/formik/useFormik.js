@@ -14,6 +14,13 @@ const useFormik = ({
 
     const setFieldValue = (fieldname, fieldvalue) => values[fieldname] = fieldvalue
 
+
+    watch(values, (value) => {
+        if(validateOnChange){
+            validateFormik(value)
+        }
+    })
+
     // 提交相关
 
     // 校验
@@ -21,20 +28,13 @@ const useFormik = ({
     const validateFormik = (values) => {
         const error = validate(values)
 
-        const valueKeys = Object.keys(values)
-
         const keys = Object.keys(error)
 
         const keysCount = Object.keys(keys).length
 
         const flag = keysCount > 0
 
-        if(flag) {
-            keys.forEach(key => setFieldError(key, error[key]))
-        } else {
-            valueKeys.filter(item => !keys.includes(item))
-            .forEach(key => deleteFieldError(key))
-        }
+        setErrors(error)
 
         return flag
 
@@ -48,24 +48,35 @@ const useFormik = ({
     }
 
     // 单个字段是否聚焦过
-    const toucheds = reactive({})
+    const toucheds = ref({})
 
-    const setFieldTouched = (filedname, fieldvalue) => toucheds[filedname] = fieldvalue
+    const setToucheds = fields => toucheds.value = fields
+
+    const setFieldTouched = (filedname, fieldvalue) => toucheds.value[filedname] = fieldvalue
+
+    const touchedAll = () => {
+        const keys = Object.keys(values)
+        
+        const obj = keys.reduce((prev, current)=> ({ [current]: true, ...prev }), {})
+
+        setToucheds(obj)
+    }
 
     // 错误
-    const errors = reactive({})
+    const errors = ref({...defaultErrors})
 
-    const setFieldError = (fieldname, fieldvalue) => errors[fieldname] = fieldvalue
+    const setErrors = fileds => errors.value = fileds
 
-    const deleteFieldError = (fieldname) => delete errors[fieldname]
+    const setFieldError = (fieldname, fieldvalue) => errors.value[fieldname] = fieldvalue
 
 
 
+    
     // 提交相关
     const submitHandler = () => {
         const flag = validateFormik(values)
 
-        console.log(flag)
+        touchedAll()
 
         if(flag) {
             return 
@@ -75,6 +86,7 @@ const useFormik = ({
 
     const formik = reactive({
         values,
+        validateOnBlur,
         setFieldValue,
         toucheds,
         setFieldTouched,

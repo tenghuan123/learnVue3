@@ -16,6 +16,9 @@ const validate = (value) => {
     if(value.firstName.length > 5) {
         errors.firstName = 'firstName太长了'
     }
+    if(value.firstName.length < 3) {
+        errors.firstName = 'firstName太短了'
+    }
 
     if(value.lastName.length < 2) {
         errors.lastName = 'lastName太短了'
@@ -37,26 +40,31 @@ watchEffect(() => {
 </script>
 
 <template>
-<FormikProvider :defaultValue="defaultValue" :onSubmit="onSubmit" :validate="validate">
+<FormikProvider 
+    :defaultValue="defaultValue" 
+    :onSubmit="onSubmit" 
+    :validate="validate"
+    :validateOnBlur="false"
+>
     <Form>
         <div class="vstack">
             <FormControl name="firstName" >
                 <label>firstName:</label>
-                <FormField v-slot="{value, onChange}">
-                    <input type="text" :value="value" @input="onChange"  />
+                <FormField v-slot="{value, onChange, onBlur}">
+                    <input type="text" :value="value" @input="onChange" @blur="onBlur"  />
                 </FormField>
-                <FormErrorMessage v-slot="{message, field}">
-                    <p v-show="message!=null">{{message}}</p>
+                <FormErrorMessage v-slot="{message, touched, field}">
+                    <p v-show="message!=null && touched != null">{{message}}</p>
                 </FormErrorMessage>
             </FormControl>
 
             <FormControl name="lastName">
                 <label>lastName:</label>
-                <FormField v-slot="{value, onChange}">
-                    <input type="text" :value="value" @input="onChange" />
+                <FormField v-slot="{value, onChange, onBlur}">
+                    <input type="text" :value="value" @input="onChange" @blur="onBlur" />
                 </FormField>
-                <FormErrorMessage v-slot="{message, field}">
-                    <p v-show="message!=null">{{message}}</p>
+                <FormErrorMessage v-slot="{message, touched, field}">
+                    <p v-show="message!=null  && touched != null">{{message}}</p>
                 </FormErrorMessage>
             </FormControl>
         </div>

@@ -16,15 +16,22 @@ export default {
             field.setValue(ev.target.value)
         }
 
+        const onBlur = () => {
+            if(!formik.validateOnBlur) return
+
+            field.setTouched(true)
+        }
+
         return {
             formik,
             value,
             field,
-            onChange
+            onChange,
+            onBlur
         }
     },
 }
 </script>
 <template>
-<slot :value="value" :onChange="onChange"></slot>
+<slot :value="value" :onChange="onChange" :onBlur="onBlur"></slot>
 </template>

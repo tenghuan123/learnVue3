@@ -12,14 +12,17 @@ export default {
 
         const value = computed(() => formik.errors[name])
 
+        const touched = computed(() => formik.toucheds[name])
+
          return {
              value,
+             touched,
              field,
-             formik
+             formik,
          }
     }
 }
 </script>
 <template>
-<slot :message="value" :field="field" :formik="formik"></slot>
+<slot :message="value" :touched="touched" :field="field" :formik="formik"></slot>
 </template>
