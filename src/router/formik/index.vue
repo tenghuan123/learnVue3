@@ -1,16 +1,80 @@
-<template>
-  <div>formik</div>
-</template>
+<script setup>
+import FormControl from './FormControl.vue';
+import Form from './Form.vue';
+import FormikProvider from './FormikProvider.vue'
+import FormField from './FormField.vue'
+import FormErrorMessage from './FormErrorMessage.vue'
+import { ref, watchEffect } from 'vue'
 
-<script>
-export default {
-    name: 'formik',
-    data: () => ({
-        
-    })
+const defaultValue = {
+    firstName:'123',
+    lastName:''
 }
+
+const validate = (value) => {
+    const errors = {}
+    if(value.firstName.length > 5) {
+        errors.firstName = 'firstName太长了'
+    }
+
+    if(value.lastName.length < 2) {
+        errors.lastName = 'lastName太短了'
+    }
+
+    return errors
+}
+
+const onSubmit = (value) => {
+    console.log(value)
+}
+
+const value = ref('')
+
+watchEffect(() => {
+    console.log(value.value)
+})
+ 
 </script>
 
-<style>
+<template>
+<FormikProvider :defaultValue="defaultValue" :onSubmit="onSubmit" :validate="validate">
+    <Form>
+        <div class="vstack">
+            <FormControl name="firstName" >
+                <label>firstName:</label>
+                <FormField v-slot="{value, onChange}">
+                    <input type="text" :value="value" @input="onChange"  />
+                </FormField>
+                <FormErrorMessage v-slot="{message, field}">
+                    <p v-show="message!=null">{{message}}</p>
+                </FormErrorMessage>
+            </FormControl>
 
+            <FormControl name="lastName">
+                <label>lastName:</label>
+                <FormField v-slot="{value, onChange}">
+                    <input type="text" :value="value" @input="onChange" />
+                </FormField>
+                <FormErrorMessage v-slot="{message, field}">
+                    <p v-show="message!=null">{{message}}</p>
+                </FormErrorMessage>
+            </FormControl>
+        </div>
+        
+        <input id="submitButton" type="submit" value="submit" />
+    </Form>
+</FormikProvider>
+    
+</template>
+
+<style>
+.vstack {
+    display: flex;
+    flex-direction: column;
+    max-width: 300px;
+}
+
+#submitButton {
+    margin-top: 20px;
+}
 </style>
