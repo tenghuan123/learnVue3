@@ -62,6 +62,8 @@ const useFormik = ({
         setToucheds(obj)
     }
 
+    watch(toucheds, (value) => console.log(value))
+
     // 错误
     const errors = ref({...defaultErrors})
 
@@ -69,7 +71,7 @@ const useFormik = ({
 
     const setFieldError = (fieldname, fieldvalue) => errors.value[fieldname] = fieldvalue
 
-
+    watch(errors, (value) => console.log(value))
 
     
     // 提交相关

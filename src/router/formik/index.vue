@@ -44,7 +44,6 @@ watchEffect(() => {
     :defaultValue="defaultValue" 
     :onSubmit="onSubmit" 
     :validate="validate"
-    :validateOnBlur="false"
 >
     <Form>
         <div class="vstack">

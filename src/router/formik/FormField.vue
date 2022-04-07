@@ -1,7 +1,7 @@
 <script>
 import { useFormControlContext } from './FormControl.vue'
 import { useFormikContext } from './FormikProvider.vue'
-import { watch } from 'vue'
+import { watch, computed } from 'vue'
 export default {
     setup(props) {
         const field = useFormControlContext()
@@ -10,16 +10,18 @@ export default {
 
         const formik = useFormikContext()
 
-        const value = formik.values[name]
+        const value = computed(() => formik.values[name])
 
         const onChange = (ev) => {
             field.setValue(ev.target.value)
         }
 
         const onBlur = () => {
+            console.log(formik.validateOnBlur)
             if(!formik.validateOnBlur) return
 
             field.setTouched(true)
+            console.log(formik.toucheds)
         }
 
         return {

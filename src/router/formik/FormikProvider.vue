@@ -8,13 +8,34 @@ export const useFormikContext = () => inject(formikKey)
 
 export default {
     props: {
-        onSubmit: Function,
-        defaultValue: Object,
-        defaultErrors: Object,
-        validate: Function,
-        validateOnBlur: Boolean,
-        validateOnChange: Boolean,
-        validateOnMount: Boolean,
+        onSubmit: {
+            type:Function,
+            default: () => {},
+        },
+        defaultValue: {
+            type: Object,
+            default: {}
+        },
+        defaultErrors: {
+            type: Object,
+            default: {}
+        },
+        validate: {
+            type:Function,
+            default: () => {},
+        },
+        validateOnBlur: {
+           type: Boolean,
+           default: true,
+        },
+        validateOnChange: {
+           type: Boolean,
+           default: true,
+        },
+        validateOnMount: {
+           type: Boolean,
+           default: true,
+        },
     },
     setup(props) {
         const formik = useFormik(props)
